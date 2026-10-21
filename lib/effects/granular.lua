@@ -1,0 +1,20 @@
+return {
+    id = "granular",
+    ugen = "MiBeads",
+    params = {
+        { type = "option", id = "quality", options = { "hi-fi", "vintage digital", "clean tape", "dirty tape" } },
+        { type = "control", id = "time", spec = controlspec.new(0, 1, 'lin', 0, 0.5) },
+        { type = "control", id = "size", spec = controlspec.new(0, 1, 'lin', 0, 0.5) },
+        { type = "control", id = "shape", spec = controlspec.new(0, 1, 'lin', 0, 0.5) },
+        { type = "control", id = "density", spec = controlspec.new(0, 1, 'lin', 0, 0.7) },
+        { type = "control", id = "pitch", spec = controlspec.new(-24, 24, 'lin', 0, 0, 'st') },
+        { type = "control", id = "feedback", spec = controlspec.new(0, 1, 'lin', 0, 0) },
+        { type = "control", id = "reverb", spec = controlspec.new(0, 1, 'lin', 0, 0) },
+        { type = "toggle", id = "freeze" },
+        { type = "taper", id = "in_gain", name = "input gain", key = "inGain", min = 0, max = 4, default = 1 },
+        { type = "control", id = "time_rnd", name = "time rnd", key = "timeRnd", spec = controlspec.new(-1, 1, 'lin', 0, 0) },
+        { type = "control", id = "size_rnd", name = "size rnd", key = "sizeRnd", spec = controlspec.new(-1, 1, 'lin', 0, 0) },
+        { type = "control", id = "shape_rnd", name = "shape rnd", key = "shapeRnd", spec = controlspec.new(-1, 1, 'lin', 0, 0) },
+        { type = "control", id = "pitch_rnd", name = "pitch rnd", key = "pitchRnd", spec = controlspec.new(-1, 1, 'lin', 0, 0) },
+    },
+}
