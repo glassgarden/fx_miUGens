@@ -2,7 +2,7 @@
 
 _Eurorack-born effects for the norns [fx mod](https://github.com/sixolet/fx)_
 
-Seven effects built on [mi-UGens](https://github.com/carlosedp/norns-mi-UGens). Each one can
+Seven effects built on [mi-UGens](https://github.com/glassgarden/norns-mi-UGens). Each one can
 sit on send A, send B or the insert slot, under any script.
 
 | Effect        | What it does                                                                                                                                                          |
@@ -18,11 +18,11 @@ sit on send A, send B or the insert slot, under any script.
 ## Install
 
 1. Install the [fx mod](https://github.com/sixolet/fx).
-2. In maiden: `;install https://github.com/carlosedp/fx_miUGens`
+2. In maiden: `;install https://github.com/glassgarden/fx_miUGens`
 3. SYSTEM > MODS: enable **fx** and **fx_miUGens**, then SYSTEM > RESTART.
 4. If mi-UGens isn't installed yet (or is an older copy without MiBeads or MiWarps), open
    SYSTEM > MODS > `FX_MIUGENS`, scroll to **install mi-UGens** at the bottom and press K3. It
-   downloads the latest [norns-mi-UGens](https://github.com/carlosedp/norns-mi-UGens) release
+   downloads the latest [norns-mi-UGens](https://github.com/glassgarden/norns-mi-UGens) release
    and moves older copies aside. Then SYSTEM > RESTART again.
 
 ## Use
