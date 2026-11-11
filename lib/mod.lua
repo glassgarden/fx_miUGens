@@ -38,7 +38,7 @@ end
 
 local NAME = mod.this_name
 local EXTENSIONS = "/home/we/.local/share/SuperCollider/Extensions"
-local MI_UGENS_URL = "https://github.com/glassgarden/norns-mi-UGens/releases/latest/download/mi-UGens-norns.tar.gz"
+local MI_UGENS_URL = "https://github.com/glassgarden/mi-UGens/releases/latest/download/mi-UGens-norns.tar.gz"
 local CONFIG_DIR = _path.data .. NAME .. "/"
 local CONFIG = CONFIG_DIR .. "enabled.lua"
 
