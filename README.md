@@ -22,8 +22,12 @@ sit on send A, send B or the insert slot, under any script.
 3. SYSTEM > MODS: enable **fx** and **fx_miUGens**, then SYSTEM > RESTART.
 4. If mi-UGens isn't installed yet (or is an older copy without MiBeads or MiWarps), open
    SYSTEM > MODS > `FX_MIUGENS`, scroll to **install mi-UGens** at the bottom and press K3. It
-   downloads the latest [mi-UGens](https://github.com/glassgarden/mi-UGens) release
-   and moves older copies aside. Then SYSTEM > RESTART again.
+   opens a [norns-deps](https://github.com/vehka/norns-deps) screen that downloads a pinned,
+   checksum-verified [mi-UGens](https://github.com/glassgarden/mi-UGens) release and moves older
+   copies aside (K3 to go, then restart norns). If you already installed it for
+   [terrarium](https://github.com/glassgarden/terrarium), which shares it, there's nothing to do.
+   A **remove mi-UGens** row appears below it once this mod has installed them; it only removes
+   what this mod put in.
 
 ## Use
 
@@ -34,7 +38,7 @@ levels; insert processes everything.
 **Pick your effects:** SYSTEM > MODS > `FX_MIUGENS` lists every effect. E2 to move, E3 or K3
 to switch one on or off, K2 to leave. Switched-off effects don't add params. Changes apply the
 next time a script loads. Effects whose UGen isn't installed show as **missing**; the last row
-installs or updates mi-UGens.
+installs or updates mi-UGens, and a row below it removes them again.
 
 ## Good to know
 
@@ -67,4 +71,5 @@ by Mutable Instruments.
 
 ## License
 
-GPL-3.0, like mi-UGens.
+GPL-3.0, like mi-UGens. `lib/deps.lua` and `lib/deps/` are
+[norns-deps](https://github.com/vehka/norns-deps) (MIT, by vehka), vendored.

@@ -37,8 +37,8 @@ end
 -- end post-init hack block
 
 local NAME = mod.this_name
+local needs = require(NAME .. "/lib/needs")
 local EXTENSIONS = "/home/we/.local/share/SuperCollider/Extensions"
-local MI_UGENS_URL = "https://github.com/glassgarden/mi-UGens/releases/latest/download/mi-UGens-norns.tar.gz"
 local CONFIG_DIR = _path.data .. NAME .. "/"
 local CONFIG = CONFIG_DIR .. "enabled.lua"
 
@@ -74,26 +74,25 @@ local function missing_ugens()
     return missing
 end
 
--- Downloads the latest mi-UGens release and runs the install.sh inside it,
--- which moves older installs aside first. done(status) runs when finished, with
--- a line short enough for the menu; the full output goes to maiden.
+-- Install and remove run on norns-deps' screens (lib/needs.lua). done(status)
+-- gets a line short enough for the menu.
 local function install_mi_ugens(done)
-    local cmd = "bash -c '" .. ([[
-        d=$(mktemp -d); trap "rm -rf $d" EXIT
-        wget -q -T 180 -O "$d/b.tgz" URL || { echo "download failed"; exit 1; }
-        tar -C "$d" -xzf "$d/b.tgz" || { echo "bad tarball"; exit 1; }
-        bash "$d/install.sh" "$d/mi-UGens"
-    ]]):gsub("URL", MI_UGENS_URL):gsub("'", "'\\''") .. "' 2>&1; echo \"exit=$?\""
-    norns.system_cmd(cmd, function(out)
-        print(out)
+    needs.install(function(ok, restart)
         installed = nil
-        if not out:match("exit=0") then
-            done("failed, see maiden")
-        elseif out:match("WARNING") then
-            done("dupes, see maiden")
-        else
+        if not ok then
+            done("failed or cancelled")
+        elseif restart then
             done("done: restart norns")
+        else
+            done("done")
         end
+    end)
+end
+
+local function remove_mi_ugens(done)
+    needs.remove(function(ok)
+        installed = nil
+        done(ok and "removed: restart norns" or "not removed")
     end)
 end
 
@@ -163,9 +162,11 @@ mod.hook.register("system_post_startup", "fx miugens post startup", function()
 end)
 
 -- Mod menu: E2/K2 to move and leave, E3/K3 to switch an effect on or off.
--- The last row installs mi-UGens.
+-- The row after the effects installs or updates mi-UGens; the last row removes
+-- what this mod installed (shown only when it installed something).
 local m = { pos = 1, status = nil, busy = false }
 local INSTALL_ROW = #effects + 1
+local function last_row() return needs.installed() and INSTALL_ROW + 1 or INSTALL_ROW end
 
 local function set_enabled(e, on)
     if not has_ugen(e.ugen) or enabled[e.id] == on then return end
@@ -178,12 +179,14 @@ m.key = function(n, z)
     if z == 0 or m.busy then return end
     if n == 2 then
         mod.menu.exit()
-    elseif n == 3 and m.pos == INSTALL_ROW then
+    elseif n == 3 and m.pos >= INSTALL_ROW then
         m.busy = true
-        m.status = "downloading..."
-        install_mi_ugens(function(status)
+        m.status = nil
+        local run = m.pos == INSTALL_ROW and install_mi_ugens or remove_mi_ugens
+        run(function(status)
             m.busy = false
             m.status = status
+            m.pos = util.clamp(m.pos, 1, last_row())
             mod.menu.redraw()
         end)
         mod.menu.redraw()
@@ -197,8 +200,8 @@ end
 m.enc = function(n, d)
     if m.busy then return end
     if n == 2 then
-        m.pos = util.clamp(m.pos + d, 1, INSTALL_ROW)
-    elseif n == 3 and m.pos ~= INSTALL_ROW then
+        m.pos = util.clamp(m.pos + d, 1, last_row())
+    elseif n == 3 and m.pos < INSTALL_ROW then
         set_enabled(effects[m.pos], d > 0)
     end
     mod.menu.redraw()
@@ -219,12 +222,16 @@ m.redraw = function()
     else
         screen.text_right("applies on next load")
     end
-    local first = util.clamp(m.pos - 2, 1, math.max(1, INSTALL_ROW - 4))
-    for i = first, math.min(first + 4, INSTALL_ROW) do
+    local first = util.clamp(m.pos - 2, 1, math.max(1, last_row() - 4))
+    for i = first, math.min(first + 4, last_row()) do
         local y = 22 + (i - first) * 10
         screen.level(i == m.pos and 15 or 4)
         screen.move(0, y)
-        if i == INSTALL_ROW then
+        if i > INSTALL_ROW then
+            screen.text("remove mi-UGens")
+            screen.move(127, y)
+            screen.text_right(m.busy and "..." or "K3")
+        elseif i == INSTALL_ROW then
             screen.text((missing > 0 and "install" or "update") .. " mi-UGens")
             screen.move(127, y)
             screen.text_right(m.busy and "..." or "K3")
