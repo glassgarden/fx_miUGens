@@ -20,11 +20,12 @@ sit on send A, send B or the insert slot, under any script.
 1. Install the [fx mod](https://github.com/sixolet/fx).
 2. In maiden: `;install https://github.com/glassgarden/fx_miUGens`
 3. SYSTEM > MODS: enable **fx** and **fx_miUGens**, then SYSTEM > RESTART.
-4. If mi-UGens isn't installed yet (or is an older copy without MiBeads or MiWarps), open
-   SYSTEM > MODS > `FX_MIUGENS`, scroll to **install mi-UGens** at the bottom and press K3. It
-   opens a [norns-deps](https://github.com/vehka/norns-deps) screen that downloads a pinned,
-   checksum-verified [mi-UGens](https://github.com/glassgarden/mi-UGens) release and moves older
-   copies aside (K3 to go, then restart norns). If you already installed it for
+4. If mi-UGens isn't installed yet (or is an older copy without MiBeads or MiWarps), the first
+   script you load after that asks for them: a [norns-deps](https://github.com/vehka/norns-deps)
+   screen that downloads a pinned, checksum-verified
+   [mi-UGens](https://github.com/glassgarden/mi-UGens) release and moves older copies aside. K3
+   installs, then K3 again restarts norns. It asks only once: if you said "not now" (K2), open
+   SYSTEM > MODS > `FX_MIUGENS` and press K3 on **install mi-UGens** at the bottom. If you already installed it for
    [terrarium](https://github.com/glassgarden/terrarium), which shares it, there's nothing to do.
    A **remove mi-UGens** row appears below it once this mod has installed them; it only removes
    what this mod put in.

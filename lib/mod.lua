@@ -161,6 +161,21 @@ mod.hook.register("system_post_startup", "fx miugens post startup", function()
     end
 end)
 
+-- First launch: the first time a script loads with mi-UGens missing, norns-deps' install screen
+-- opens over it (K3 installs, then restarts norns; K2 is "not now"). Asked once: the marker stays,
+-- and from then on the install row in SYSTEM > MODS > FX_MIUGENS is the way.
+local ASKED = CONFIG_DIR .. "asked_install"
+mod.hook.register("script_post_init", "fx miugens first launch", function()
+    if #missing_ugens() == 0 or util.file_exists(ASKED) then return end
+    util.make_dir(CONFIG_DIR)
+    local f = io.open(ASKED, "w")
+    if f then
+        f:write(tostring(os.time()))
+        f:close()
+    end
+    install_mi_ugens(function(status) print("fx miugens: mi-UGens " .. status) end)
+end)
+
 -- Mod menu: E2/K2 to move and leave, E3/K3 to switch an effect on or off.
 -- The row after the effects installs or updates mi-UGens; the last row removes
 -- what this mod installed (shown only when it installed something).
